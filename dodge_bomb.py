@@ -22,6 +22,8 @@ def main():
                 return 0
 
         tmr += 1
+        x += 1
+        y += 1
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
         screen.blit(bb_img, [x, y])
