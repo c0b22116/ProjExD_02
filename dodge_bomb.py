@@ -6,12 +6,13 @@ import pygame as pg
 
 # 練習４
 delta = {
-    pg.K_UP: (0, -1),
-    pg.K_DOWN: (0, +1),
-    pg.K_LEFT: (-1, 0),
-    pg.K_RIGHT: (+1, 0),
+    pg.K_UP: (0, -2),
+    pg.K_DOWN: (0, +2),
+    pg.K_LEFT: (-2, 0),
+    pg.K_RIGHT: (+2, 0),
     }
 
+accs = [a for a in range(1,11)]
 
 def check_bound(scr_rect: pg.Rect, obj_rect: pg.Rect):
     """
@@ -62,12 +63,14 @@ def main():
                     kk_rect.move_ip(-mv[0], -mv[1])
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rect) # 練習４
-        bb_rect.move_ip(vx, vy) 
         yoko, tate = check_bound(screen.get_rect(), bb_rect)
         if not yoko:
             vx *= -1
         if not tate:
             vy *= -1
+            
+        avx, avy = vx*accs[min(tmr//1000, 9)], vy*accs[min(tmr//1000, 9)]
+        bb_rect.move_ip(avx, avy)
         screen.blit(bb_img, bb_rect) 
         if kk_rect.colliderect(bb_rect):
             return
