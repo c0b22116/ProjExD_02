@@ -11,13 +11,9 @@ delta = {
     pg.K_DOWN: (0, +2),
     pg.K_LEFT: (-2, 0),
     pg.K_RIGHT: (+2, 0),
-    pg.K_w: (0, -6), #課題5 wasdで操作すると、矢印でそうさするよりも早く移動できる
-    pg.K_s: (0, +6), #課題5
-    pg.K_a: (-6, 0), #課題5
-    pg.K_d: (+6, 0), #課題5 
     }
 
-accs = [a for a in range(1,11)] #課題2
+accs = [a for a in range(1, 11)] #課題2
 
 def check_bound(scr_rect: pg.Rect, obj_rect: pg.Rect):
     """
@@ -45,21 +41,25 @@ def main():
     kk_rect.center = 900, 400
     
     bb_img = pg.Surface((20,20))
-    pg.draw.circle(bb_img,(255,0,0),(10,10),10)
-    bb_img.set_colorkey((0,0,0))
+    pg.draw.circle(bb_img, (255,0,0), (10,10), 10)
+    bb_img.set_colorkey((0, 0, 0))
     bb_rect = bb_img.get_rect()
     bb_rect.center = random.randint(0, 1600), random.randint(0, 900)
     vx, vy = +1, +1
     fonto  = pg.font.Font(None, 80) #課題3
-    zanki  = pg.font.Font(None, 80) #課題3
+    zanki  = pg.font.Font(None, 80) #課題5
     tmr = 0
+    n = 3 #課題5 残りの残機数
 
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return 0
-            
         tmr += 1
+        screen.blit(bg_img, [0, 0])
+        txt = zanki.render((str)(n), True, (0, 0, 0)) # 課題5
+        screen.blit(txt, [1400, 200]) # 課題5
+        
         key_lst = pg.key.get_pressed()
         for k, mv in delta.items():
             if key_lst[k]:
@@ -68,8 +68,8 @@ def main():
             for k, mv in delta.items():
                 if key_lst[k]:
                     kk_rect.move_ip(-mv[0], -mv[1])
-        screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rect) # 練習４
+        
         yoko, tate = check_bound(screen.get_rect(), bb_rect)
         if not yoko:
             vx *= -1
@@ -77,14 +77,22 @@ def main():
             vy *= -1
         avx, avy = vx*accs[min(tmr//1000, 9)], vy*accs[min(tmr//1000, 9)]# 課題2
         bb_rect.move_ip(avx, avy)# 課題2
-        screen.blit(bb_img, bb_rect) 
+        screen.blit(bb_img, bb_rect)
+        
         if kk_rect.colliderect(bb_rect):
-            tmr1 = tmr # 課題３
-            txt = fonto.render("Game Over", True, (0,0,0)) # 課題3
-            screen.blit(txt, [300, 200]) # 課題3
-            pg.display.update() # 課題3
-            time.sleep(3) # 課題3
-            return
+            n -= 1 # 課題5
+            if (n == 0):
+                tmr1 = tmr # 課題３
+                txt = fonto.render("Game Over", True, (0, 0, 0)) # 課題3
+                screen.blit(txt, [300, 200]) # 課題3
+                t = zanki.render((str)(n), True, (0, 0, 0)) # 課題5
+                screen.blit(t, [1400, 200]) # 課題5
+                pg.display.update() # 課題3
+                time.sleep(3) # 課題3
+                return
+            else:
+                bb_rect.center = random.randint(0, 1600), random.randint(0, 900)
+                
         pg.display.update()
         clock.tick(1000)
 
