@@ -1,5 +1,6 @@
 import random
 import sys
+import time
 
 import pygame as pg
 
@@ -12,7 +13,7 @@ delta = {
     pg.K_RIGHT: (+2, 0),
     }
 
-accs = [a for a in range(1,11)]
+accs = [a for a in range(1,11)] #課題2
 
 def check_bound(scr_rect: pg.Rect, obj_rect: pg.Rect):
     """
@@ -45,6 +46,7 @@ def main():
     bb_rect = bb_img.get_rect()
     bb_rect.center = random.randint(0, 1600), random.randint(0, 900)
     vx, vy = +1, +1
+    fonto  = pg.font.Font(None, 80) #課題3
     tmr = 0
 
     while True:
@@ -68,11 +70,15 @@ def main():
             vx *= -1
         if not tate:
             vy *= -1
-            
-        avx, avy = vx*accs[min(tmr//1000, 9)], vy*accs[min(tmr//1000, 9)]
-        bb_rect.move_ip(avx, avy)
+        avx, avy = vx*accs[min(tmr//1000, 9)], vy*accs[min(tmr//1000, 9)]# 課題2
+        bb_rect.move_ip(avx, avy)# 課題2
         screen.blit(bb_img, bb_rect) 
         if kk_rect.colliderect(bb_rect):
+            tmr1 = tmr
+            txt = fonto.render("Game Over", True, (0,0,0))
+            screen.blit(txt, [300, 200])
+            pg.display.update()
+            time.sleep(3)
             return
         pg.display.update()
         clock.tick(1000)
