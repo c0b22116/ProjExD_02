@@ -69,6 +69,8 @@ def main():
         if not tate:
             vy *= -1
         screen.blit(bb_img, bb_rect) 
+        if kk_rect.colliderect(bb_rect):
+            return
         pg.display.update()
         clock.tick(1000)
 
