@@ -11,6 +11,10 @@ delta = {
     pg.K_DOWN: (0, +2),
     pg.K_LEFT: (-2, 0),
     pg.K_RIGHT: (+2, 0),
+    pg.K_w: (0, -6),
+    pg.K_s: (0, +6),
+    pg.K_a: (-6, 0),
+    pg.K_d: (+6, 0),
     }
 
 accs = [a for a in range(1,11)] #課題2
@@ -47,6 +51,7 @@ def main():
     bb_rect.center = random.randint(0, 1600), random.randint(0, 900)
     vx, vy = +1, +1
     fonto  = pg.font.Font(None, 80) #課題3
+    zanki  = pg.font.Font(None, 80) #課題3
     tmr = 0
 
     while True:
@@ -74,11 +79,11 @@ def main():
         bb_rect.move_ip(avx, avy)# 課題2
         screen.blit(bb_img, bb_rect) 
         if kk_rect.colliderect(bb_rect):
-            tmr1 = tmr
-            txt = fonto.render("Game Over", True, (0,0,0))
-            screen.blit(txt, [300, 200])
-            pg.display.update()
-            time.sleep(3)
+            tmr1 = tmr # 課題３
+            txt = fonto.render("Game Over", True, (0,0,0)) # 課題3
+            screen.blit(txt, [300, 200]) # 課題3
+            pg.display.update() # 課題3
+            time.sleep(3) # 課題3
             return
         pg.display.update()
         clock.tick(1000)
