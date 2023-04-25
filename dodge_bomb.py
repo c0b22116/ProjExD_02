@@ -12,6 +12,22 @@ delta = {
     pg.K_RIGHT: (+1, 0),
     }
 
+
+def check_bound(scr_rect: pg.Rect, obj_rect: pg.Rect):
+    """
+    オブジェクトが画面内or画面外を判定する
+    引数：画面SurfaceのRect
+    引数：こうかとん，または，爆弾SurfaceのRect
+    戻り値：横方向，縦方向のはみ出し判定結果（画面内：True／画面外：False）
+    """
+    
+    yoko, tate = True, True
+    if obj_rect.left < scr_rect.left or scr_rect.right < obj_rect.right:
+        yoko = False
+    if obj_rect.top < scr_rect.top or scr_rect.bottom < obj_rect.bottom:
+        tate = False
+    return yoko, tate
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((1600, 900))
@@ -34,20 +50,27 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return 0
-
+            
         tmr += 1
         key_lst = pg.key.get_pressed()
         for k, mv in delta.items():
             if key_lst[k]:
                 kk_rect.move_ip(mv)
-            
+        if check_bound(screen.get_rect(), kk_rect) != (True, True):
+            for k, mv in delta.items():
+                if key_lst[k]:
+                    kk_rect.move_ip(-mv[0], -mv[1])
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rect) # 練習４
         bb_rect.move_ip(vx, vy) 
+        yoko, tate = check_bound(screen.get_rect(), bb_rect)
+        if not yoko:
+            vx *= -1
+        if not tate:
+            vy *= -1
         screen.blit(bb_img, bb_rect) 
         pg.display.update()
         clock.tick(1000)
-
 
 
 if __name__ == "__main__":
